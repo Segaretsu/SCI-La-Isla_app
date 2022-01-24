@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_la_isla/pages/detail_page.dart';
 import 'package:flutter_la_isla/pages/navpages/main_page.dart';
 import 'package:flutter_la_isla/pages/welcome_page.dart';
 
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MainPage(),
+      home: DetailPage(),
     );
   }
 }

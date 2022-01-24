@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_la_isla/pages/navpages/bar_item_page.dart';
-import 'package:flutter_la_isla/pages/navpages/home_page.dart';
+import 'package:flutter_la_isla/pages/home_page.dart';
 import 'package:flutter_la_isla/pages/navpages/my_page.dart';
 import 'package:flutter_la_isla/pages/navpages/sales_page.dart';
 
