@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_la_isla/model/producto_mas_vendido_DTO.dart';
+import 'package:flutter_la_isla/model/producto_mas_vendido_dto.dart';
 
-abstract class CubitStates extends Equatable {}
+abstract class CubitStates extends Equatable {
+  List<ProductoMasVendidoDTO> get productosMasVendidos => [];
+}
 
 class InitialState extends CubitStates {
 
@@ -32,5 +34,17 @@ class LoadedState extends CubitStates {
   // Cuandose agrega un props aca, el state sabe que debe recargar cuando se cambia la data.
   @override
   List<Object> get props => [productosMasVendidos];
+
+}
+
+class DetailState extends CubitStates {
+
+  DetailState(this.producto);
+
+  final ProductoMasVendidoDTO producto;
+  
+  // Cuandose agrega un props aca, el state sabe que debe recargar cuando se cambia la data.
+  @override
+  List<Object> get props => [producto];
 
 }

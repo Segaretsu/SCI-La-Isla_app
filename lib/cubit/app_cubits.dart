@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_la_isla/cubit/app_cubit_states.dart';
+import 'package:flutter_la_isla/model/producto_mas_vendido_dto.dart';
 import 'package:flutter_la_isla/services/data_services.dart';
 
 class AppCubits extends Cubit<CubitStates> {
@@ -18,5 +19,14 @@ class AppCubits extends Cubit<CubitStates> {
     } catch (e) {
 
     }
+  }
+
+   detailPage(ProductoMasVendidoDTO producto) {
+    emit(LoadingState());
+    emit(DetailState(producto));
+  }
+
+  goHome() {
+    emit(LoadedState(productosMasVendidos));
   }
 }

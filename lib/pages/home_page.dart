@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_la_isla/cubit/app_cubit_states.dart';
+import 'package:flutter_la_isla/cubit/app_cubits.dart';
 import 'package:flutter_la_isla/modules/misc/colors.dart';
+import 'package:flutter_la_isla/modules/misc/utils.dart';
 import 'package:flutter_la_isla/modules/widgets/app_large_text.dart';
 import 'package:flutter_la_isla/modules/widgets/app_text.dart';
 
@@ -12,12 +16,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-
   var images = {
-    "balloning.png" : "Ventas",
-    "hiking.png" : "Productos",
-    "kayaking.png" : "Categorias",
-    "snorkling.png" : "Medios de pago",
+    "balloning.png": "Ventas",
+    "hiking.png": "Productos",
+    "kayaking.png": "Categorias",
+    "snorkling.png": "Medios de pago",
   };
 
   @override
@@ -25,176 +28,224 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     TabController _tabController = TabController(length: 3, vsync: this);
 
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Menú text
-          Container(
-            padding: const EdgeInsets.only(top: 70, left: 20),
-            child: Row(
+      body: BlocBuilder<AppCubits, CubitStates>(
+        builder: (context, state) {
+          var masVendidos = state.productosMasVendidos;
+          if (state is LoadedState) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.menu, size: 30, color: Colors.black54),
-                Expanded(child: Container()),
+                // Menú text
                 Container(
-                  margin: const EdgeInsets.only(right: 20),
-                  width: 50,
-                  height: 50,
-
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.grey.withOpacity(0.5)
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 30,),
-          // Estadisticas text
-          Container(
-            margin: const EdgeInsets.only(left: 20),
-            child: AppLargeText(text: "Descubre"),
-          ),
-          SizedBox(height: 20,),
-          // tabbar
-          Container(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: TabBar(
-                labelPadding: const EdgeInsets.only(left: 20, right: 20),
-                controller: _tabController,
-                labelColor: Colors.black,
-                unselectedLabelColor: Colors.grey,
-                isScrollable: true,
-                indicatorSize: TabBarIndicatorSize.label,
-                indicator: CircleTabIndicator(color: AppColors.mainColor, radius: 4),
-                tabs: [
-                  Tab(text: "Más vendido",),
-                  Tab(text: "Por agotarse",),
-                  Tab(text: "Emotions",),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(left: 20),
-            height: 300,
-            width: double.maxFinite,
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                ListView.builder(
-                  itemCount: 3,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      margin: const EdgeInsets.only(right: 15, top: 10),
-                      width: 200,
-                      height: 300,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
-                        image: DecorationImage(
-                          image: AssetImage("assets/images/mountain.jpeg"),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                Text("There"),
-                Text("Bye"),
-              ],
-            ),
-          ),
-          SizedBox(height: 30,),
-          Container(
-            margin: const EdgeInsets.only(left: 20, right: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AppLargeText(text: "Más funcionalidades", size:22,),
-                AppText(text: "Ver todas", color: AppColors.textColor1),
-              ],
-            ),
-          ),
-          SizedBox(height: 10,),
-          Container(
-            height: 120,
-            width: double.maxFinite,
-            margin: const EdgeInsets.only(left: 20),
-            child: ListView.builder(
-              itemCount: 4,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (_, index) {
-                return Container(
-                  margin: const EdgeInsets.only(right: 30),
-                  child: Column(
+                  padding: const EdgeInsets.only(top: 50, left: 20),
+                  child: Row(
                     children: [
+                      Icon(Icons.menu, size: 30, color: Colors.black54),
+                      Expanded(child: Container()),
                       Container(
-                          //margin: const EdgeInsets.only(right: 50),
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
-                            image: DecorationImage(
-                              image: AssetImage("assets/images/" + images.keys.elementAt(index)),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10,),
-                        Container(
-                          child: AppText(
-                            text: images.values.elementAt(index),
-                            color: AppColors.textColor2
-                          ),
-                        ),
+                        margin: const EdgeInsets.only(right: 20),
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey.withOpacity(0.5)),
+                      ),
                     ],
                   ),
-                );
-            }),
-          ),
-        ],
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                // Estadisticas text
+                Container(
+                  margin: const EdgeInsets.only(left: 20),
+                  child: AppLargeText(text: "Descubre"),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                // tabbar
+                Container(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: TabBar(
+                      labelPadding: const EdgeInsets.only(left: 20, right: 20),
+                      controller: _tabController,
+                      labelColor: Colors.black,
+                      unselectedLabelColor: Colors.grey,
+                      isScrollable: true,
+                      indicatorSize: TabBarIndicatorSize.label,
+                      indicator: CircleTabIndicator(
+                          color: AppColors.mainColor, radius: 4),
+                      tabs: [
+                        Tab(
+                          text: "Más vendido",
+                        ),
+                        Tab(
+                          text: "Por agotarse",
+                        ),
+                        Tab(
+                          text: "Sin función",
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(left: 20),
+                  height: 200,
+                  width: double.maxFinite,
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      ListView.builder(
+                        itemCount: masVendidos.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (BuildContext context, int index) {
+                          return GestureDetector(
+                            onTap: (){
+                              BlocProvider.of<AppCubits>(context).detailPage(masVendidos[index]);
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(right: 15, top: 10),
+                              width: 200,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                // image: DecorationImage(
+                                //   image:
+                                //       AssetImage("assets/images/mountain.jpeg"),
+                                //   fit: BoxFit.cover,
+                                // ),
+                              ),
+                              child: Container(
+                                margin: const EdgeInsets.only(left: 20, top: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    AppText(text: masVendidos[index].nombre, size: 16, color: Colors.black),
+                                    SizedBox(height: 20,),
+                                    Wrap(
+                                      children: [
+                                        AppText(text: "Ventas: ", color: Colors.black,),
+                                        AppText(text: masVendidos[index].cantidadVentas.toString()),
+                                      ],
+                                    ),
+                                    SizedBox(height: 20,),
+                                     Wrap(
+                                      children: [
+                                        AppText(text: "Ganancia: ", color: Colors.black,), 
+                                        AppText(text: UtilFormatter.currentCurrencyFormat(masVendidos[index].gananciaTotal)),
+                                      ],
+                                    ),
+                                  ],
+                                )
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      Text("PROXIMAMENTE"),
+                      Text("PROXIMAMENTE"),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 20, right: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AppLargeText(
+                        text: "Más funcionalidades",
+                        size: 22,
+                      ),
+                      AppText(text: "Ver todas", color: AppColors.textColor1),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  height: 120,
+                  width: double.maxFinite,
+                  margin: const EdgeInsets.only(left: 20),
+                  child: ListView.builder(
+                      itemCount: 4,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (_, index) {
+                        return Container(
+                          margin: const EdgeInsets.only(right: 30),
+                          child: Column(
+                            children: [
+                              Container(
+                                //margin: const EdgeInsets.only(right: 50),
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white,
+                                  image: DecorationImage(
+                                    image: AssetImage("assets/images/" +
+                                        images.keys.elementAt(index)),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                child: AppText(
+                                    text: images.values.elementAt(index),
+                                    color: AppColors.textColor2),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                ),
+              ],
+            );
+          } else {
+            return Container();
+          }
+        },
       ),
     );
   }
-
 }
 
 class CircleTabIndicator extends Decoration {
   final Color color;
   double radius;
 
-  CircleTabIndicator({
-    required this.color,
-    required this.radius
-  });
+  CircleTabIndicator({required this.color, required this.radius});
 
   @override
   BoxPainter createBoxPainter([VoidCallback? onChanged]) {
-    return _CiclePainter(color:color, radius:radius);
+    return _CiclePainter(color: color, radius: radius);
   }
-
 }
 
 class _CiclePainter extends BoxPainter {
-
   final Color color;
   double radius;
-  
-  _CiclePainter({
-    required this.color,
-    required this.radius
-  });
+
+  _CiclePainter({required this.color, required this.radius});
 
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
     Paint _paint = Paint();
     _paint.color = color;
     _paint.isAntiAlias = true;
-    final Offset circleOffset = Offset(configuration.size!.width/2 -radius/2, configuration.size!.height -radius);
+    final Offset circleOffset = Offset(
+        configuration.size!.width / 2 - radius / 2,
+        configuration.size!.height - radius);
     canvas.drawCircle(offset + circleOffset, radius, _paint);
   }
-    
-  }
+}

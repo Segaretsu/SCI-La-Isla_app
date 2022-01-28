@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_la_isla/model/producto_mas_vendido_DTO.dart';
+import 'package:flutter_la_isla/model/producto_mas_vendido_dto.dart';
 import 'package:http/http.dart' as http;
 
 class DataServices {
